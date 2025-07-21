@@ -19,12 +19,6 @@ function App() {
   const [countdown, setCountdown] = useState(5);
   const apiUrl = import.meta.env.VITE_API_URL;
 
-  useEffect(() => {
-    fetch(`${apiUrl}/hello`)
-      .then((res) => res.json())
-      .then((data) => console.log(data));
-  }, []);
-
   const [theme, setTheme] = useState(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("theme");
