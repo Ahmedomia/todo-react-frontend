@@ -17,7 +17,7 @@ function App() {
   const deleteIntervalRef = useRef(null);
 
   const [countdown, setCountdown] = useState(5);
-  const apiUrl = `${import.meta.env.VITE_API_URL}api/v1/todos`;
+  const apiUrl = `${import.meta.env.VITE_API_URL}api/v1`;
 
   const [theme, setTheme] = useState(() => {
     if (typeof window !== "undefined") {
