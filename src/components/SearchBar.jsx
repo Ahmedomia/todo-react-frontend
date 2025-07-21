@@ -7,10 +7,10 @@ const SearchBar = ({ searchTerm, setSearchTerm, filter, setFilter, theme, setThe
       <div className="relative w-full max-w-md">
         <input
           type="text"
-          placeholder="Search todos..."
+          placeholder="Search note..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-4 pr-10 py-2 rounded border border-[#6C63FF] bg-white text-black  placeholder-gray-400"
+          className="w-full pl-4 pr-10 py-2 uppercase rounded border border-[#6C63FF] bg-white text-black dark:bg-black dark:text-white placeholder-gray-400"
         />
         <img
           src="/src/assets/images/lens.svg"

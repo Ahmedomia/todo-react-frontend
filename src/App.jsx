@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import SearchBar from "./components/SearchBar";
 import TodoList from "./components/TodoList";
 import AddTodoButton from "./components/AddTodoButton";
@@ -10,18 +10,42 @@ function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filter, setFilter] = useState("All");
-  /*   const [nextId, setNextId] = useState(1);
-   */ const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
   const [todoToEdit, setTodoToEdit] = useState(null);
   const [lastDeleted, setLastDeleted] = useState(null);
   const [showUndo, setShowUndo] = useState(false);
+  const deleteIntervalRef = useRef(null);
 
   const [countdown, setCountdown] = useState(5);
-
-  const [theme, setTheme] = useState("light");
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
-    fetch("http://localhost:3000/api/v1/todos")
+    fetch(`${apiUrl}/hello`)
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  }, []);
+
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("theme");
+      if (stored) return stored;
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches)
+        return "dark";
+    }
+    return "light";
+  });
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  useEffect(() => {
+    fetch(`${apiUrl}/todos`)
       .then((res) => res.json())
       .then((data) =>
         setTodos(
@@ -46,23 +70,31 @@ function App() {
   }, [theme]);
 
   const handleDeleteTodo = (id) => {
-    const deletedTodo = todos.find((todo) => todo.id === id);
+    const index = todos.findIndex((todo) => todo.id === id);
+    const deletedTodo = todos[index];
     if (!deletedTodo) return;
 
     setTodos((prev) => prev.filter((todo) => todo.id !== id));
-    setLastDeleted(deletedTodo);
+
+    setLastDeleted({ todo: deletedTodo, index });
     setShowUndo(true);
     setCountdown(5);
 
-    fetch(`http://localhost:3000/api/v1/todos/${id}`, {
-      method: "DELETE",
-    }).catch((err) => console.error("Delete error:", err));
+    if (deleteIntervalRef.current) {
+      clearInterval(deleteIntervalRef.current);
+    }
 
-    let interval = setInterval(() => {
+    deleteIntervalRef.current = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          clearInterval(interval);
+          clearInterval(deleteIntervalRef.current);
+          deleteIntervalRef.current = null;
           setShowUndo(false);
+
+          fetch(`${apiUrl}/todos/${id}`, {
+            method: "DELETE",
+          }).catch((err) => console.error("Delete error:", err));
+
           setLastDeleted(null);
           return 0;
         }
@@ -72,36 +104,27 @@ function App() {
   };
 
   const handleUndo = () => {
-    if (lastDeleted) {
-      fetch("http://localhost:3000/api/v1/todos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title: lastDeleted.text,
-          completed: lastDeleted.done,
-        }),
-      })
-        .then((res) => res.json())
-        .then((newTodo) => {
-          setTodos((prev) => [
-            ...prev,
-            {
-              id: newTodo.id,
-              text: newTodo.title,
-              done: newTodo.completed,
-            },
-          ]);
-        })
-        .catch((err) => console.error("Undo error:", err));
-
-      setLastDeleted(null);
-      setShowUndo(false);
+    if (deleteIntervalRef.current) {
+      clearInterval(deleteIntervalRef.current);
+      deleteIntervalRef.current = null;
     }
+
+    if (lastDeleted) {
+      setTodos((prev) => {
+        const restored = [...prev];
+        restored.splice(lastDeleted.index, 0, lastDeleted.todo);
+        return restored;
+      });
+    }
+
+    setLastDeleted(null);
+    setShowUndo(false);
+    setCountdown(0);
   };
 
   const handleAddTodo = (text) => {
     if (text.trim()) {
-      fetch("http://localhost:3000/api/v1/todos", {
+      fetch(`${apiUrl}/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: text.trim(), completed: false }),
@@ -124,7 +147,7 @@ function App() {
   const handleToggleTodo = (id) => {
     const todo = todos.find((t) => t.id === id);
     if (!todo) return;
-    fetch(`http://localhost:3000/api/v1/todos/${id}`, {
+    fetch(`${apiUrl}/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: todo.text, completed: !todo.done }),
@@ -146,7 +169,7 @@ function App() {
   const handleEditTodo = (id, newText) => {
     const todo = todos.find((t) => t.id === id);
     if (!todo) return;
-    fetch(`http://localhost:3000/api/v1/todos/${id}`, {
+    fetch(`${apiUrl}/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ content: newText.trim(), completed: todo.done }),
@@ -173,7 +196,7 @@ function App() {
 
   return (
     <div>
-      <div className="min-h-screen px-4 py-6 relative transition-colors duration-300 bg-red-500 dark:bg-blue-500 text-black dark:text-white">
+      <div className="min-h-screen px-4 py-6 relative transition-colors duration-300 bg-white dark:bg-black text-black dark:text-white">
         <h1 className="text-3xl font-bold text-center mb-6 text-black dark:text-white">
           TODO LIST
         </h1>

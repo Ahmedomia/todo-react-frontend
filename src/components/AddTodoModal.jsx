@@ -16,28 +16,44 @@ const AddTodoModal = ({ isOpen, onClose, onAdd }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white  rounded p-6 shadow-lg w-[500px] h-[290px] ">
-        <h2 className="text-xl font-bold mb-4 text-center">NEW NODE</h2>
+      <div className="bg-white dark:bg-black border rounded p-6 shadow-lg w-[500px] h-[290px]">
+        <h2 className="text-xl font-bold mb-4 text-center text-black dark:text-white">
+          NEW NOTE
+        </h2>
         <form onSubmit={handleSubmit}>
           <input
             autoFocus
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
-            placeholder="Input your note..."
-            className="w-full px-4 py-2 border border-[#6C63FF]  rounded mb-4 bg-white text-black "
+            placeholder="INPUT YOUR NOTE..."
+            className="
+              w-full px-4 py-2 border border-[#6C63FF] rounded mb-4 
+              bg-white dark:bg-black text-gray-700 dark:text-gray-300
+              focus:outline-none focus:ring-2 focus:ring-[#6C63FF]
+              transition-all duration-200 uppercase
+            "
           />
           <div className="flex justify-between mt-28">
             <button
               type="button"
               onClick={onClose}
-              className="h-[38px] w-[97px] rounded-[5px] bg-white text-[#6C63FF] border-1 border-[#6C63FF]"
+              className="
+                h-[38px] w-[97px] rounded-[5px] 
+                bg-white text-[#6C63FF] border border-[#6C63FF]
+                hover:bg-[#6C63FF]/10 dark:bg-black cursor-pointer
+              "
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="h-[38px] w-[97px] rounded-[5px] bg-[#6C63FF] text-white"
+              className="
+                h-[38px] w-[97px] rounded-[5px] 
+                bg-[#6C63FF] text-white
+                hover:bg-[#5a53e0]
+                cursor-pointer
+              "
             >
               Apply
             </button>

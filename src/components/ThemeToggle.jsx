@@ -8,7 +8,7 @@ const ThemeToggle = ({ theme, setTheme }) => {
   return (
     <button
       onClick={toggleTheme}
-      className="bg-[#6C63FF] p-2 rounded"
+      className="bg-[#6C63FF] p-2 rounded cursor-pointer"
       title="Toggle theme"
     >
       {theme === "light" ? (
