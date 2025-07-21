@@ -25,12 +25,12 @@ const TodoItem = ({ todo, onToggle, onEdit, onDelete }) => {
           className="relative w-5 h-5 group"
         >
           <img
-            src="/src/assets/images/Edit.svg"
+            src="/assets/images/Edit.svg"
             alt="Edit"
             className="absolute inset-0 w-[18px] h-[18px] group-hover:opacity-0 transition-opacity duration-200 cursor-pointer"
           />
           <img
-            src="/src/assets/images/editblue.png"
+            src="/assets/images/editblue.png"
             alt="Edit colored"
             className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           />
@@ -41,12 +41,12 @@ const TodoItem = ({ todo, onToggle, onEdit, onDelete }) => {
           className="relative w-5 h-5 group"
         >
           <img
-            src="/src/assets/images/trash-svgrepo-com.svg"
+            src="/assets/images/trash-svgrepo-com.svg"
             alt="Delete"
             className="absolute inset-0 w-[18px] h-[18px] group-hover:opacity-0 transition-opacity duration-200 cursor-pointer"
           />
           <img
-            src="/src/assets/images/trashred-svgrepo-com.png"
+            src="/assets/images/trashred-svgrepo-com.png"
             alt="Delete colored"
             className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           />

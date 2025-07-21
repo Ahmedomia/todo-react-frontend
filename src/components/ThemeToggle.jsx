@@ -12,9 +12,9 @@ const ThemeToggle = ({ theme, setTheme }) => {
       title="Toggle theme"
     >
       {theme === "light" ? (
-        <img src="/src/assets/images/Vector.svg" alt="Dark mode" />
+        <img src="/assets/images/Vector.svg" alt="Dark mode" />
       ) : (
-        <img src="/src/assets/images/sun.svg" alt="Light mode" />
+        <img src="/assets/images/sun.svg" alt="Light mode" />
       )}
     </button>
   );

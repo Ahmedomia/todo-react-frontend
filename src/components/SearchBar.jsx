@@ -13,14 +13,14 @@ const SearchBar = ({ searchTerm, setSearchTerm, filter, setFilter, theme, setThe
           className="w-full pl-4 pr-10 py-2 uppercase rounded border border-[#6C63FF] bg-white text-black dark:bg-black dark:text-white placeholder-gray-400"
         />
         <img
-          src="/src/assets/images/lens.svg"
+          src="/assets/images/lens.svg"
           alt="Search"
           className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 opacity-70 pointer-events-none"
         />
       </div>
       <DropdownMenu filter={filter} setFilter={setFilter} />
 
-      <ThemeToggle theme={theme} setTheme={setTheme}/>
+      <ThemeToggle theme={theme} setTheme={setTheme} />
     </div>
   );
 };

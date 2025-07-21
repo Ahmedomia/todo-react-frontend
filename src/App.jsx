@@ -265,7 +265,7 @@ function App() {
               </div>
               <span>UNDO</span>
               <img
-                src="/src/assets/images/undo.svg"
+                src="/assets/images/undo.svg"
                 alt="Undo"
                 className="w-4 h-4"
               />

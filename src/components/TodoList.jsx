@@ -6,7 +6,7 @@ const TodoList = ({ todos, onToggle, onDelete, onEdit }) => {
       {todos.length === 0 ? (
         <div className="flex flex-col items-center justify-center mt-10">
           <img
-            src="/src/assets/images/Detective-check-footprint 1.svg"
+            src="/assets/images/Detective-check-footprint 1.svg"
             alt="Empty"
             className="w-40 h-auto mb-4"
           />

@@ -3,7 +3,7 @@ const DropdownMenu = ({ filter, setFilter }) => {
     <div className="relative group">
       <button className="flex items-center justify-between w-32 px-4 py-2 bg-[#6C63FF] text-white rounded cursor-pointer">
         {filter}
-        <img src="/src/assets/images/arr1.svg" alt="arrow" />
+        <img src="/assets/images/arr1.svg" alt="arrow" />
       </button>
 
       <ul className="absolute mt-1 right-0 w-32 rounded shadow-lg z-10 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition duration-200 border border-[#6C63FF]">
