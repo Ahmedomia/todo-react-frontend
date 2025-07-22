@@ -17,7 +17,7 @@ const SearchBar = ({
           placeholder="Search note..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full pl-4 pr-10 py-2 uppercase rounded border border-[#6C63FF] bg-white text-black dark:bg-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6C63FF]
+          className="w-full pl-4 pr-10 py-2 uppercase rounded border border-[#6C63FF] bg-white text-black dark:bg-black dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#6C63FF]/50
               transition-all duration-200"
         />
         <img

@@ -15,8 +15,14 @@ const AddTodoModal = ({ isOpen, onClose, onAdd }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
-      <div className="bg-white dark:bg-black border rounded p-6 shadow-lg w-[500px] h-[290px]">
+    <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50 px-4">
+      <div
+        className="
+          bg-white dark:bg-black border rounded p-6 shadow-lg
+          w-full max-w-[500px]  /* max width on large screens */
+          h-auto
+        "
+      >
         <h2 className="text-xl font-bold mb-4 text-center text-black dark:text-white">
           NEW NOTE
         </h2>
@@ -31,11 +37,11 @@ const AddTodoModal = ({ isOpen, onClose, onAdd }) => {
             className="
               w-full px-4 py-2 border border-[#6C63FF] rounded mb-4 
               bg-white dark:bg-black text-gray-700 dark:text-gray-300
-              focus:outline-none focus:ring-2 focus:ring-[#6C63FF]
+              focus:outline-none focus:ring-2 focus:ring-[#6C63FF]/50
               transition-all duration-200 uppercase
             "
           />
-          <div className="flex justify-between mt-28">
+          <div className="flex justify-between mt-10">
             <button
               type="button"
               onClick={onClose}
