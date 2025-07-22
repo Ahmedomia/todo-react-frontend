@@ -1,7 +1,7 @@
 const DropdownMenu = ({ filter, setFilter }) => {
   return (
     <div className="relative group">
-      <button className="flex items-center justify-between w-32 px-4 py-2 bg-[#6C63FF] text-white rounded-md cursor-pointer">
+      <button className="h-10 flex items-center justify-between w-32 px-4 py-2 bg-[#6C63FF] text-white rounded-md cursor-pointer">
         {filter}
         <img src="/assets/images/arr1.svg" alt="arrow" />
       </button>
@@ -13,7 +13,7 @@ const DropdownMenu = ({ filter, setFilter }) => {
       opacity-0 invisible
       group-hover:opacity-100 group-hover:visible
       transition duration-200
-      border border-[#6C63FF] border-t-0"
+      border border-[#6C63FF]"
       >
         {["All", "Complete", "Incomplete"].map((item) => (
           <li

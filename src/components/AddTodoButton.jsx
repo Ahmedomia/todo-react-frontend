@@ -5,10 +5,10 @@ const AddTodoButton = ({ onClick }) => {
       className="
         fixed
         bottom-6
-        right-6          /* default: near right edge (mobile/small) */
+        right-6
         sm:bottom-8
         sm:right-8
-        lg:right-88      /* on laptop/desktop: push it more left */
+        lg:right-88
         bg-[#6C63FF]
         p-4
         rounded-full

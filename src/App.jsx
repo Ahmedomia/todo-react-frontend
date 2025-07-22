@@ -31,7 +31,7 @@ function App() {
   });
 
   useEffect(() => {
-    setLoading(true); // ✅ show skeleton on page load
+    setLoading(true);
     fetch(`${apiUrl}/todos`)
       .then((res) => res.json())
       .then((data) => {
@@ -41,12 +41,13 @@ function App() {
             text: todo.title,
             done: todo.completed,
           }))
+          .sort((a, b)=> a.id - b.id)
         );
-        setLoading(false); // ✅ hide skeleton when done
+        setLoading(false);
       })
       .catch((err) => {
         console.error(err);
-        setLoading(false); // ✅ hide skeleton even if error
+        setLoading(false);
       });
   }, []);
 
@@ -60,20 +61,6 @@ function App() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
-  useEffect(() => {
-    fetch(`${apiUrl}/todos`)
-      .then((res) => res.json())
-      .then((data) =>
-        setTodos(
-          data.map((todo) => ({
-            id: todo.id,
-            text: todo.title,
-            done: todo.completed,
-          }))
-        )
-      )
-      .catch((err) => console.error(err));
-  }, []);
 
   useEffect(() => {
     console.log(theme);
@@ -138,44 +125,67 @@ function App() {
     setCountdown(0);
   };
 
-  const handleAddTodo = (text) => {
-    if (text.trim()) {
-      fetch(`${apiUrl}/todos`, {
+  const handleAddTodo = async (text) => {
+    if (!text.trim()) return;
+
+    const tempId = Date.now();
+    const optimisticTodo = { id: tempId, text: text.trim(), done: false };
+
+    setTodos((prev) => [...prev, optimisticTodo]);
+
+    try {
+      const res = await fetch(`${apiUrl}/todos`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ title: text.trim(), completed: false }),
-      })
-        .then((res) => res.json())
-        .then((newTodo) =>
-          setTodos((prev) => [
-            ...prev,
-            {
-              id: newTodo.id,
-              text: newTodo.title,
-              done: newTodo.completed,
-            },
-          ])
-        )
-        .catch((err) => console.error(err));
+      });
+      const newTodo = await res.json();
+
+      setTodos((prev) =>
+        prev.map((t) => (t.id === tempId ? { ...t, id: newTodo.id } : t))
+      );
+    } catch (err) {
+      console.error(err);
+      setTodos((prev) => prev.filter((t) => t.id !== tempId));
     }
   };
+  
+const handleToggleTodo = async (id) => {
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) return;
 
-  const handleToggleTodo = (id) => {
-    const todo = todos.find((t) => t.id === id);
-    if (!todo) return;
-    fetch(`${apiUrl}/todos/${id}`, {
+  const previousDone = todo.done;
+  const newDone = !todo.done;
+
+  setTodos((prev) =>
+    prev.map((t) => (t.id === id ? { ...t, done: newDone } : t))
+  );
+
+  try {
+    const res = await fetch(`${apiUrl}/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: todo.text, completed: !todo.done }),
-    })
-      .then((res) => res.json())
-      .then((updated) => {
-        setTodos((prev) =>
-          prev.map((t) => (t.id === id ? { ...t, done: updated.completed } : t))
-        );
-      })
-      .catch((err) => console.error(err));
-  };
+      body: JSON.stringify({
+        content: todo.text,
+        completed: newDone,
+      }),
+    });
+
+    if (!res.ok) throw new Error("Failed to update todo");
+
+    const updated = await res.json();
+
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, done: updated.completed } : t))
+    );
+  } catch (err) {
+    console.error("Toggle error:", err);
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, done: previousDone } : t))
+    );
+  }
+};
+
 
   const handleStartEdit = (todo) => {
     setTodoToEdit(todo);

@@ -9,6 +9,7 @@ const ThemeToggle = ({ theme, setTheme }) => {
     <button
       onClick={toggleTheme}
       className="
+      h-10
     bg-[#6C63FF] p-2 rounded cursor-pointer
     hover:bg-[#5a53e0]
     focus:outline-none focus:ring-2 focus:ring-[#6C63FF]/50
