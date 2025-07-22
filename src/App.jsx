@@ -15,6 +15,7 @@ function App() {
   const [lastDeleted, setLastDeleted] = useState(null);
   const [showUndo, setShowUndo] = useState(false);
   const deleteIntervalRef = useRef(null);
+  const [loading, setLoading] = useState(true);
 
   const [countdown, setCountdown] = useState(5);
   const apiUrl = `${import.meta.env.VITE_API_URL}api/v1`;
@@ -28,6 +29,27 @@ function App() {
     }
     return "light";
   });
+
+  useEffect(() => {
+    setLoading(true); // ✅ show skeleton on page load
+    fetch(`${apiUrl}/todos`)
+      .then((res) => res.json())
+      .then((data) => {
+        setTodos(
+          data.map((todo) => ({
+            id: todo.id,
+            text: todo.title,
+            done: todo.completed,
+          }))
+        );
+        setLoading(false); // ✅ hide skeleton when done
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false); // ✅ hide skeleton even if error
+      });
+  }, []);
+
 
   useEffect(() => {
     if (theme === "dark") {
@@ -209,6 +231,7 @@ function App() {
           onToggle={handleToggleTodo}
           onEdit={handleStartEdit}
           onDelete={handleDeleteTodo}
+          loading={loading}
         />
 
         <EditTodoModal

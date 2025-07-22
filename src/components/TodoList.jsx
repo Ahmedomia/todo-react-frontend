@@ -1,6 +1,15 @@
 import TodoItem from "./TodoItem";
+import CheckboxList from "./CheckboxList";
 
-const TodoList = ({ todos, onToggle, onDelete, onEdit }) => {
+const TodoList = ({ todos, onToggle, onDelete, onEdit, loading }) => {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center">
+       <CheckboxList />
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-md mx-auto">
       {todos.length === 0 ? (

@@ -11,8 +11,10 @@
     "tailwind": "tailwindcss -i ./src/input.css -o ./dist/output.css --watch"
   },
   "dependencies": {
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@tailwindcss/vite": "^4.1.11",
     "react": "^19.1.0",
+    "react-content-loader": "^7.1.1",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {

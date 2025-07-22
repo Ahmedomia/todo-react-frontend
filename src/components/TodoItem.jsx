@@ -1,7 +1,7 @@
 const TodoItem = ({ todo, onToggle, onEdit, onDelete }) => {
   return (
     <div className="flex items-center justify-between gap-3 p-3 border-b border-[#6C63FF]/50">
-      <div className="flex items-center gap-3 flex-1">
+      <div className="flex items-center gap-3 flex-1 min-w-0">
         <input
           type="checkbox"
           checked={todo.done}
@@ -9,13 +9,13 @@ const TodoItem = ({ todo, onToggle, onEdit, onDelete }) => {
           className="w-5 h-5 accent-[#6C63FF] cursor-pointer "
         />
         <span
-          className={`text-lg font-bold uppercase cursor-default ${
+          className={`text-lg font-bold uppercase cursor-default break-words whitespace-normal line-clamp-2 ${
             todo.done
               ? "line-through text-gray-500/50"
               : "text-black dark:text-white"
           }`}
         >
-          {todo.text}
+          {todo.text.length > 100 ? todo.text.slice(0, 100) : todo.text}
         </span>
       </div>
 
@@ -30,7 +30,7 @@ const TodoItem = ({ todo, onToggle, onEdit, onDelete }) => {
             className="absolute inset-0 w-[18px] h-[18px] group-hover:opacity-0 transition-opacity duration-200 cursor-pointer"
           />
           <img
-            src="/assets/images/editblue.png"
+            src="/assets/images/editblue.svg"
             alt="Edit colored"
             className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           />
@@ -46,7 +46,7 @@ const TodoItem = ({ todo, onToggle, onEdit, onDelete }) => {
             className="absolute inset-0 w-[18px] h-[18px] group-hover:opacity-0 transition-opacity duration-200 cursor-pointer"
           />
           <img
-            src="/assets/images/trashred-svgrepo-com.png"
+            src="/assets/images/trashred-svgrepo-com.svg"
             alt="Delete colored"
             className="absolute inset-0 w-full h-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
           />

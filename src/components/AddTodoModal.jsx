@@ -15,7 +15,7 @@ const AddTodoModal = ({ isOpen, onClose, onAdd }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="fixed inset-0 bg-[rgba(0,0,0,0.5)] flex justify-center items-center z-50">
       <div className="bg-white dark:bg-black border rounded p-6 shadow-lg w-[500px] h-[290px]">
         <h2 className="text-xl font-bold mb-4 text-center text-black dark:text-white">
           NEW NOTE
@@ -25,6 +25,7 @@ const AddTodoModal = ({ isOpen, onClose, onAdd }) => {
             autoFocus
             type="text"
             value={text}
+            maxLength={100}
             onChange={(e) => setText(e.target.value)}
             placeholder="INPUT YOUR NOTE..."
             className="
