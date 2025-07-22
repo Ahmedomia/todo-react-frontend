@@ -149,7 +149,7 @@ function App() {
       setTodos((prev) => prev.filter((t) => t.id !== tempId));
     }
   };
-  
+
 const handleToggleTodo = async (id) => {
   const todo = todos.find((t) => t.id === id);
   if (!todo) return;
@@ -192,24 +192,41 @@ const handleToggleTodo = async (id) => {
     setIsEditOpen(true);
   };
 
-  const handleEditTodo = (id, newText) => {
-    const todo = todos.find((t) => t.id === id);
-    if (!todo) return;
-    fetch(`${apiUrl}/todos/${id}`, {
+const handleEditTodo = async (id, newText) => {
+  const todo = todos.find((t) => t.id === id);
+  if (!todo) return;
+
+  const previousText = todo.text;
+  const trimmed = newText.trim();
+  if (!trimmed) return;
+
+  setTodos((prev) =>
+    prev.map((t) => (t.id === id ? { ...t, text: trimmed } : t))
+  );
+  setIsEditOpen(false);
+  setTodoToEdit(null);
+
+  try {
+    const res = await fetch(`${apiUrl}/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: newText.trim(), completed: todo.done }),
-    })
-      .then((res) => res.json())
-      .then((updated) => {
-        setTodos((prev) =>
-          prev.map((t) => (t.id === id ? { ...t, text: updated.title } : t))
-        );
-        setIsEditOpen(false);
-        setTodoToEdit(null);
-      })
-      .catch((err) => console.error(err));
-  };
+      body: JSON.stringify({ content: trimmed, completed: todo.done }),
+    });
+
+    if (!res.ok) throw new Error("Failed to update todo");
+    const updated = await res.json();
+
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, text: updated.title } : t))
+    );
+  } catch (err) {
+    console.error("Edit error:", err);
+
+    setTodos((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, text: previousText } : t))
+    );
+  }
+};
 
   const filteredTodos = todos.filter((todo) => {
     const matchesSearch = (todo.text || "")
